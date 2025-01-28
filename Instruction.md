@@ -7,8 +7,8 @@ This guide is designed to help you set up a Nuxt 3 project with Nuxt UI and Fire
 1. [Requirements](#requirements)
 2. [Initial Setup (Nuxt)](#initial-setup-nuxt)
 3. [Installing Nuxt UI](#installing-nuxt-ui)
-4. [Installing Firebase](#installing-firebase)
-5. [Installing Key Libraries](#installing-key-libraries)
+4. [Installing Key Libraries](#installing-key-libraries)
+5. [Installing Firebase](#installing-firebase)
 
 ## Step 1: Requirements
 
@@ -81,42 +81,7 @@ Tailwind helps you design and style your Nuxt 3 project with custom colors, font
 
 For more information regarding the Nuxt UI Module, follow [this link](https://ui.nuxt.com/getting-started)
 
-## Step 4: Installing Firebase
-
-To set up Firebase for your Nuxt 3 project, follow these steps:
-
-1. Install the necessary Firebase packages:
-
-   ```bash
-   npm install firebase
-   npx nuxi@latest module add vuefire
-   ```
-
-2. Initialize Firebase in your `nuxt.config.ts` file:
-
-   ```ts
-   // nuxt.config.ts
-   export default defineNuxtConfig({
-     modules: [
-       // ... other modules
-       'nuxt-vuefire',
-     ],
-
-     vuefire: {
-       config: {
-         apiKey: '...',
-         authDomain: '...',
-         projectId: '...',
-         appId: '...',
-         // there could be other properties depending on the project
-       },
-     },
-   })
-   ```
-
-For more information regarding the Nuxt Firebase module, follow [this link](https://vuefire.vuejs.org/nuxt/getting-started.html).
-
-## Step 5: Installing Key Libraries
+## Step 4: Installing Key Libraries
 
 The following libraries are essential for your Nuxt 3 project:
 
@@ -280,3 +245,113 @@ const { t } = useI18n()
 ```
 
 Pinia is now set up and ready to use in your Nuxt 3 project for efficient state management.
+
+## Step 5: Installing Firebase
+
+To set up Firebase for your Nuxt 3 project, follow these steps:
+
+1. Install the necessary Firebase packages:
+
+   ```bash
+   npm install firebase
+   npx nuxi@latest module add vuefire
+   ```
+
+2. Initialize Firebase in your `nuxt.config.ts` file:
+
+   ```ts
+   // nuxt.config.ts
+   export default defineNuxtConfig({
+     modules: [
+       // ... other modules
+       'nuxt-vuefire',
+     ],
+
+     vuefire: {
+       config: {
+         apiKey: '...',
+         authDomain: '...',
+         projectId: '...',
+         appId: '...',
+         // there could be other properties depending on the project
+       },
+     },
+   })
+   ```
+
+### useAuth composable
+
+Create a `useAuth` composable to handle Firebase authentication in your Nuxt 3 project. This composable will provide methods for user login, registration, and logout, as well as a reactive user state. Here's an example implementation:
+
+```typescript
+import { useNuxtApp } from '#app'
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+} from 'firebase/auth'
+
+export function useAuth() {
+  const { $firebaseAuth } = useNuxtApp()
+  const user = ref()
+
+  onAuthStateChanged($firebaseAuth, (firebaseUser) => {
+    user.value = firebaseUser ? firebaseUser : null
+  })
+
+  const login = async (email: string, password: string) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        $firebaseAuth,
+        email,
+        password
+      )
+      return userCredential.user
+    } catch (error) {
+      console.error('Login error:', error)
+      throw error
+    }
+  }
+
+  const register = async (email: string, password: string) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        $firebaseAuth,
+        email,
+        password
+      )
+      return userCredential.user
+    } catch (error) {
+      console.error('Registration error:', error)
+      throw error
+    }
+  }
+
+  const logout = async () => {
+    try {
+      await signOut($firebaseAuth)
+    } catch (error) {
+      console.error('Logout error:', error)
+      throw error
+    }
+  }
+
+  return {
+    user,
+    login,
+    register,
+    logout,
+  }
+}
+```
+
+Use this composable in your components or pages to manage authentication:
+
+```vue
+<script setup>
+  const { login, user, logout } = useAuth()
+</script>
+```
+
+For more information regarding the Nuxt Firebase module, follow [this link](https://vuefire.vuejs.org/nuxt/getting-started.html).
