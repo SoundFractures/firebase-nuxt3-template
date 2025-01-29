@@ -38,7 +38,15 @@ To clone the repository and run the project, follow these steps:
    ```bash
    npm run dev
    ```
-   Once you are done with setting up the template, proceed to the [Deployment](#step-6-deployment) section for Firebase.
+
+Once you are done with setting up the template, you will need to setup your Firebase project.
+
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Create a new project
+3. Then create a `.env` and copy the config from Firebase (use `.env.example` as a template)
+4. Change the `.firebaserc` file to point to your new project (change the `projects.default` to your project's name)
+
+5. Run `npm run generate` and `firebase deploy` to deploy the project
 
 # Setup up from scratch
 
