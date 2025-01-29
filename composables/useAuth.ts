@@ -6,7 +6,7 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth'
 
-export function useAuth() {
+const useAuth = () => {
   const { $firebaseAuth } = useNuxtApp()
   const user = ref()
 
@@ -58,3 +58,5 @@ export function useAuth() {
     logout,
   }
 }
+
+export default useAuth

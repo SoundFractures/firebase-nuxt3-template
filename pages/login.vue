@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { collection, getDocs } from 'firebase/firestore'
   const { login, user, logout } = useAuth()
   const state = ref({
     email: '',
@@ -22,6 +23,19 @@
     } catch (error) {
       // Handle logout error
       console.error('Logout failed:', error)
+    }
+  }
+
+  const testCollection = ref([])
+  const handleGetCollection = async () => {
+    try {
+      const db = useFirestore()
+      const testCollectionRef = collection(db, 'test-collection')
+      const querySnapshot = await getDocs(testCollectionRef)
+      console.log(querySnapshot.docs) // Do something with the collection
+    } catch (error) {
+      // Handle error
+      console.error('Error getting collection:', error)
     }
   }
 </script>
@@ -53,13 +67,23 @@
       </UForm>
     </div>
 
-    <UCard class="mt-4" v-if="user">
+    <UCard v-if="user" class="mt-4">
       <h1 class="mb-4 font-bold text-2xl">Logged in as</h1>
       {{ user.email }}
     </UCard>
     <UButton v-if="user" color="red" class="mt-4 w-full" @click="handleLogout">
       Logout
     </UButton>
+    <div v-if="user" class="mx-auto mt-8 max-w-md">
+      <UButton color="primary" class="mt-4 w-full" @click="handleGetCollection">
+        Get Collection
+      </UButton>
+      <div v-if="testCollection.length">
+        <ul class="mt-4 list-disc list-inside">
+          <li v-for="item in testCollection" :key="item">{{ item }}</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 

@@ -100,7 +100,7 @@ npm install @nuxtjs/i18n @pinia/nuxt pinia
 Install dev dependencies:
 
 ```bash
-npm install --save-dev @nuxt/eslint-config eslint prettier typescript
+npm install --save-dev @nuxt/eslint eslint prettier typescript
 ```
 
 After installing these libraries, configure them in your `nuxt.config.ts` file and create necessary configuration files (e.g., `.eslintrc.js`, `.prettierrc`) to customize their behavior according to your project needs.
@@ -353,5 +353,27 @@ Use this composable in your components or pages to manage authentication:
   const { login, user, logout } = useAuth()
 </script>
 ```
+
+### Retrieving Firebase Collections
+
+Here's an example of how to retrieve a collection from Firebase:
+
+```typescript
+import { collection, getDocs } from 'firebase/firestore'
+
+const handleGetCollection = async () => {
+  try {
+    const db = useFirestore()
+    const testCollectionRef = collection(db, 'test-collection')
+    const querySnapshot = await getDocs(testCollectionRef)
+    console.log(querySnapshot.docs) // Do something with the collection
+  } catch (error) {
+    // Handle error
+    console.error('Error getting collection:', error)
+  }
+}
+```
+
+Note: For any troubleshooting regarding permissions, check [this link](https://stackoverflow.com/questions/46590155/firestore-permission-denied-missing-or-insufficient-permissions).
 
 For more information regarding the Nuxt Firebase module, follow [this link](https://vuefire.vuejs.org/nuxt/getting-started.html).
