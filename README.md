@@ -48,6 +48,8 @@ Once you are done with setting up the template, you will need to setup your Fire
 
 5. Run `npm run generate` and `firebase deploy` to deploy the project
 
+Note: You will need `firebase-tools` installed globally to deploy the project. And login to your google account, through the console.
+
 # Setup up from scratch
 
 This guide is designed to help you set up the template project from scratch.
