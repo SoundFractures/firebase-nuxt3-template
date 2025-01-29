@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
+  target: 'static',
   modules: [
     '@nuxt/ui',
     '@nuxtjs/i18n',
@@ -20,5 +21,9 @@ export default defineNuxtConfig({
       appId: process.env.FIREBASE_APP_ID,
     },
     auth: true,
+  },
+  nitro: {
+    // NOTE: we don't want to use the firebase preset because this is a static website and the firebase preset is for SSR
+    preset: 'node', // the default
   },
 })

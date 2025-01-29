@@ -9,6 +9,7 @@ This guide is designed to help you set up a Nuxt 3 project with Nuxt UI and Fire
 3. [Installing Nuxt UI](#installing-nuxt-ui)
 4. [Installing Key Libraries](#installing-key-libraries)
 5. [Installing Firebase](#installing-firebase)
+6. [Deployment](#deployment)
 
 ## Step 1: Requirements
 
@@ -246,7 +247,7 @@ const { t } = useI18n()
 
 Pinia is now set up and ready to use in your Nuxt 3 project for efficient state management.
 
-## Step 5: Installing Firebase
+## Step 5: Installing & Use of Firebase
 
 To set up Firebase for your Nuxt 3 project, follow these steps:
 
@@ -260,7 +261,6 @@ To set up Firebase for your Nuxt 3 project, follow these steps:
 2. Initialize Firebase in your `nuxt.config.ts` file:
 
    ```ts
-   // nuxt.config.ts
    export default defineNuxtConfig({
      modules: [
        // ... other modules
@@ -269,14 +269,27 @@ To set up Firebase for your Nuxt 3 project, follow these steps:
 
      vuefire: {
        config: {
-         apiKey: '...',
-         authDomain: '...',
-         projectId: '...',
-         appId: '...',
+         apiKey: process.env.FIREBASE_API_KEY,
+         authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+         projectId: process.env.FIREBASE_PROJECT_ID,
+         storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+         messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+         appId: process.env.FIREBASE_APP_ID,
          // there could be other properties depending on the project
        },
      },
    })
+   ```
+
+3. Set the env variables in your `.env` file (check the `.env.example` for more information):
+
+   ```env
+   VITE_FIREBASE_API_KEY=...
+   VITE_FIREBASE_AUTH_DOMAIN=...
+   VITE_FIREBASE_PROJECT_ID=...
+   VITE_FIREBASE_STORAGE_BUCKET=...
+   VITE_FIREBASE_MESSAGING_SENDER_ID=...
+   VITE_FIREBASE_APP_ID=...
    ```
 
 ### useAuth composable
@@ -377,3 +390,51 @@ const handleGetCollection = async () => {
 Note: For any troubleshooting regarding permissions, check [this link](https://stackoverflow.com/questions/46590155/firestore-permission-denied-missing-or-insufficient-permissions).
 
 For more information regarding the Nuxt Firebase module, follow [this link](https://vuefire.vuejs.org/nuxt/getting-started.html).
+
+## Step 6: Deployment
+
+Make sure to install firebase related tools to help you deploy the app:
+
+```bash
+npm install -g firebase-tools
+```
+
+Once that is done, login into firebase with the same account you have your firebase project in:
+
+```bash
+firebase login
+```
+
+Make sure to have these set in `nuxt.config.ts`:
+
+```typescript
+export default defineNuxtConfig({
+  // other properties
+  ssr: false,
+  target: 'static',
+  nitro: {
+    preset: 'node',
+  },
+  // other properties
+})
+```
+
+Then run the next command to init te firebase project and select the next options:
+
+- When selecting features, select only `hosting`
+- Use existing project, and select the project in use
+- Set `.output/public` for the public directory
+- Select `y` for the single page app
+- Select `n` for the github actions
+
+Build the project:
+
+```bash
+npm run generate
+```
+
+Finally, deploy to Firebase:
+
+```bash
+firebase deploy
+```
