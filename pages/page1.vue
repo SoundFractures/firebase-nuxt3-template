@@ -1,13 +1,13 @@
 <script setup lang="ts">
   definePageMeta({
-    name: PAGE_NAME.HOME,
+    name: PAGE_NAME.PAGE1,
   })
 </script>
 
 <template>
-  <div>Home</div>
+  <div>Page 1</div>
 </template>
 
 <style scoped>
-  /* Add any additional styles if needed */
+  /* Component styles go here */
 </style>

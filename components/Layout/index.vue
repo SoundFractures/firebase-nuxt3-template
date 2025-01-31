@@ -14,14 +14,15 @@
   </template>
   <template v-else>
     <div class="flex w-screen min-h-screen">
-      <!-- LayoutSidebar -->
-      <div class="flex flex-col flex-grow h-screen overflow-y-auto">
-        <!-- LayoutAppbar -->
+      <LayoutSidebar class="top-0 sticky" />
 
+      <div class="flex flex-col flex-grow h-screen overflow-y-auto">
+        <LayoutAppbar />
         <main class="flex-grow p-0">
           <slot />
         </main>
       </div>
+      <slot name="other" />
     </div>
   </template>
 </template>
