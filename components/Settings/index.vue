@@ -7,15 +7,14 @@
     confirmPassword: '',
   })
 
-  const isError = ref(false)
   const isLoading = ref(false)
 
   const handlePasswordChange = async () => {
     isLoading.value = true
-    isError.value = false
     try {
-      // Implement password change logic here
-
+      if (passwords.value.newPassword !== passwords.value.confirmPassword) {
+        return
+      }
       await changePassword(passwords.value.newPassword)
       nextTick(() => {
         logout()
@@ -24,7 +23,6 @@
         })
       })
     } catch (error) {
-      isError.value = true
       // Handle error
       console.error('Password change failed:', error)
     } finally {
