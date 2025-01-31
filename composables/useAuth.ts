@@ -4,15 +4,19 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  type User,
 } from 'firebase/auth'
 
 const useAuth = () => {
   const { $firebaseAuth } = useNuxtApp()
-  const user = ref()
+  const user = useState<User | null>(() => null)
 
   onAuthStateChanged($firebaseAuth, (firebaseUser) => {
     user.value = firebaseUser ? firebaseUser : null
+    isSignedIn.value = !!firebaseUser
   })
+
+  const isSignedIn = useState<boolean>(() => !!user.value)
 
   const login = async (email: string, password: string) => {
     try {
@@ -51,11 +55,22 @@ const useAuth = () => {
     }
   }
 
+  const checkAuthState = async (): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const unsubscribe = onAuthStateChanged($firebaseAuth, (user) => {
+        unsubscribe()
+        resolve(!!user)
+      })
+    })
+  }
+
   return {
     user,
+    isSignedIn,
     login,
     register,
     logout,
+    checkAuthState,
   }
 }
 

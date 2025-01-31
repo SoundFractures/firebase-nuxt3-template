@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <Layout>
+  <Layout variant="login">
     <slot />
   </Layout>
 </template>

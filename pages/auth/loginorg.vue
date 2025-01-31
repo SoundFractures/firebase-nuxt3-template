@@ -1,5 +1,8 @@
 <script setup lang="ts">
   import { collection, getDocs } from 'firebase/firestore'
+  definePageMeta({
+    layout: 'guest',
+  })
   const { login, user, logout } = useAuth()
   const state = ref({
     email: '',

@@ -22,6 +22,20 @@ export default defineNuxtConfig({
     },
     auth: true,
   },
+  i18n: {
+    langDir: './locales',
+    defaultLocale: 'en',
+    strategy: 'no_prefix',
+    locales: [
+      {
+        code: 'en',
+        iso: 'en-US',
+        file: 'en.ts',
+        name: 'English',
+      },
+    ],
+    vueI18n: './i18n.options.ts',
+  },
   nitro: {
     // NOTE: we don't want to use the firebase preset because this is a static website and the firebase preset is for SSR
     preset: 'node', // the default
