@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updatePassword,
   type User,
 } from 'firebase/auth'
 
@@ -64,6 +65,21 @@ const useAuth = () => {
     })
   }
 
+  // Password change
+  const changePassword = async (newPassword: string): Promise<void> => {
+    try {
+      const currentUser = $firebaseAuth.currentUser
+      if (!currentUser) {
+        throw new Error('No user is currently signed in')
+      }
+
+      await updatePassword(currentUser, newPassword)
+    } catch (error) {
+      console.error('Password change error:', error)
+      throw error
+    }
+  }
+
   return {
     user,
     isSignedIn,
@@ -71,6 +87,7 @@ const useAuth = () => {
     register,
     logout,
     checkAuthState,
+    changePassword,
   }
 }
 

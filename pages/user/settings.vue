@@ -5,7 +5,9 @@
 </script>
 
 <template>
-  <div>User Settings</div>
+  <UContainer>
+    <Settings />
+  </UContainer>
 </template>
 
 <style scoped>
